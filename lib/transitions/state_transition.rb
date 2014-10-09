@@ -40,10 +40,9 @@ module Transitions
   private
 
     def perform_guard(obj, guard, *args)
-      return guard.call(obj, *args) if guard.respond_to?(:call)
-
-      case guard
-      when Symbol, String
+      if guard.respond_to?(:call)
+        guard.call(obj, *args)
+      elsif guard.is_a?(Symbol) || guard.is_a?(String)
         obj.send(guard, *args)
       else
         true
